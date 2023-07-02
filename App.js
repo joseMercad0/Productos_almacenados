@@ -1,11 +1,11 @@
-import { View, StyleSheet } from "react-native";
+import { StyleSheet } from "react-native";
 import FetchData from "./src";
 import Login from "./src/components/login";
-
 import { auth } from "./config";
 import { useState } from "react";
 import { onAuthStateChanged } from "firebase/auth";
 import Signup from "./src/components/signup";
+import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 
 function App() {
   const [loggedIn, setLoggedIn] = useState(false);
@@ -29,7 +29,11 @@ function App() {
     return <Login setScreen={setScreen} />;
   };
 
-  return <View style={styles.container}>{getScreen()}</View>;
+  return (
+    <SafeAreaProvider>
+      <SafeAreaView style={styles.container}>{getScreen()}</SafeAreaView>
+    </SafeAreaProvider>
+  );
 }
 
 const styles = StyleSheet.create({
