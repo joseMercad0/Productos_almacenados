@@ -1,8 +1,8 @@
-import { StyleSheet, Text, View, Button } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 import React from "react";
 import { SimpleLineIcons } from "@expo/vector-icons";
 
-const Header = ({ title, onOpenDrawer }) => {
+const Header = ({ title, onOpenDrawer, setScreen }) => {
   return (
     <View style={styles.container}>
       <View style={styles.leftButton}>
@@ -16,7 +16,14 @@ const Header = ({ title, onOpenDrawer }) => {
       </View>
       <Text style={styles.title}>{title}</Text>
       <View style={styles.rightButton}>
-        <SimpleLineIcons name="plus" size={24} color="black" />
+        <SimpleLineIcons
+          name="plus"
+          size={24}
+          color="black"
+          onPress={() => {
+            setScreen("scanner");
+          }}
+        />
       </View>
     </View>
   );

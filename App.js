@@ -1,11 +1,11 @@
 import { StyleSheet } from "react-native";
-import FetchData from "./src";
 import Login from "./src/components/login";
 import { auth } from "./config";
 import { useState } from "react";
 import { onAuthStateChanged } from "firebase/auth";
 import Signup from "./src/components/signup";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
+import IndexScreen from "./src";
 
 function App() {
   const [loggedIn, setLoggedIn] = useState(false);
@@ -24,7 +24,7 @@ function App() {
 
   //cambio de pantalla dependiendo de si hay usuario logeado
   const getScreen = () => {
-    if (loggedIn) return <FetchData uid={uid} />;
+    if (loggedIn) return <IndexScreen uid={uid} />;
     if (screen === "signup") return <Signup setScreen={setScreen} />;
     return <Login setScreen={setScreen} />;
   };
