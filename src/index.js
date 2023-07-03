@@ -1,68 +1,30 @@
-import { View, Text, StyleSheet, Image } from 'react-native';
-import React, { useState, useEffect } from 'react';
-import { db } from '../config';
-import { ref, onValue } from 'firebase/database';
+import { StyleSheet } from "react-native";
+import React, { useState } from "react";
+import Scanner from "./components/scanner";
+import ListaProductos from "./components/listaProductos";
+import RegistrarProducto from "./components/registrarProducto";
 
-const FetchData = () => {
-  const [todoData, setTodoData] = useState([]);
+const IndexScreen = ({ uid }) => {
+  const [screen, setScreen] = useState(null);
+  const [barcode, setBarcode] = useState(null);
 
-  useEffect(() => {
-    const starCountRef = ref(db, 'usuarios/UqOijTh7ACPVSKKUBZuvJoofOgK2/snaps');
-    onValue(starCountRef, (snapshot) => {
-      const data = snapshot.val();
-      if (data) {
-        const newUsuarios = Object.values(data);
-        console.log(newUsuarios);
-        setTodoData(newUsuarios);
-      } else {
-        setTodoData([]);
-      }
-    });
-  }, []);
+  const handleBarcodeChange = (newBarcode) => {
+    setBarcode(newBarcode);
+  };
 
-  return (
-    <View style={styles.container}>
-      <Text style={styles.header}>Productos Registrados</Text>
-      {todoData.map((item, index) => {
-        return (
-          <View key={index} style={styles.itemContainer}>
-            <Image style={styles.image} source={{ uri: item.imagenURL }} />
-            <Text style={styles.text}>Descripción: {item.descripcion}</Text>
-            <Text style={styles.text}>Precio: {item.precio}</Text>
-            <Text style={styles.text}>Cantidad: {item.cantidad}</Text>
-            <Text style={styles.text}>Barcode: {item.barcode}</Text>
-            <Text style={styles.text}>From: {item.from}</Text>
-          </View>
-        );
-      })}
-    </View>
-  );
+  const getScreen = () => {
+    //cambio de pantalla
+    if (screen === "scanner") {
+      return <Scanner setScreen={setScreen} onChange={handleBarcodeChange} />;
+    }
+    if (screen === "nuevo") return <RegistrarProducto barcode={barcode} />;
+    else if (screen === null)
+      return <ListaProductos setScreen={setScreen} uid={uid} />;
+  };
+
+  return getScreen();
 };
 
-export default FetchData;
+export default IndexScreen;
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-  },
-  header: {
-    fontSize: 30,
-    textAlign: 'center',
-    marginTop: 100,
-    fontWeight: 'bold',
-  },
-  itemContainer: {
-    marginTop: 20,
-    alignItems: 'center',
-  },
-  image: {
-    width: 100,
-    height: 100,
-    marginBottom: 10,
-  },
-  text: {
-    fontSize: 20,
-    textAlign: 'center',
-  },
-});
+const styles = StyleSheet.create({});
