@@ -1,61 +1,86 @@
 import React, { useState } from "react";
-import {
-  View,
-  Text,
-  TextInput,
-  Button,
-  Image,
-  TouchableOpacity,
-  StyleSheet,
-} from "react-native";
+import { View, Text, TextInput, Button, StyleSheet } from "react-native";
 import PhotoPicker from "./photoPicker";
+import axios from "axios";
 
 const RegistrarProducto = ({ barcode }) => {
-  const [name, setName] = useState("");
-  const [quantity, setQuantity] = useState("");
-  const [price, setPrice] = useState("");
   const [image, setImage] = useState(null);
+  const [error, setError] = useState(null);
+  const [newProducto, setNewProducto] = useState({
+    id: "",
+    nombre: "",
+    descripcion: "",
+    precio: "",
+    barCode: barcode,
+    cantidad: "",
+    imagenId: "",
+    imagenUrl: "",
+    usuarioId: "",
+    fechaHora: "",
+  });
 
   // Función para guardar el producto
-  const saveProduct = () => {
-    // Aquí puedes implementar la lógica para guardar el producto en tu base de datos o hacer cualquier otra acción necesaria
-    console.log("Producto guardado:", {
-      name,
-      quantity,
-      price,
-      barcode,
-      image,
-    });
-
-    // Restablecer los campos del formulario después de guardar
-    setName("");
-    setQuantity("");
-    setPrice("");
-    setImage(null);
+  const saveProduct = async () => {
+    try {
+      await axios.post("http://52.20.145.207:3000/api/product", newProducto);
+      setNewProducto({
+        id: "",
+        nombre: "",
+        descripcion: "",
+        precio: "",
+        barCode: "",
+        cantidad: "",
+        imagenId: "",
+        imagenUrl: "",
+        usuarioId: "",
+        fechaHora: "",
+      });
+      setImage(null);
+      setError("");
+    } catch (error) {
+      setError(error);
+      console.error(error);
+    }
   };
 
   return (
     <View style={styles.container}>
       <Text style={styles.label}>Nombre:</Text>
-      <TextInput style={styles.input} value={name} onChangeText={setName} />
+      <TextInput
+        style={styles.input}
+        value={newProducto.nombre}
+        onChangeText={(text) =>
+          setNewProducto({ ...newProducto, nombre: text })
+        }
+      />
       <Text style={styles.label}>Cantidad:</Text>
       <TextInput
         style={styles.input}
-        value={quantity}
-        onChangeText={setQuantity}
+        value={newProducto.cantidad}
+        onChangeText={(text) =>
+          setNewProducto({ ...newProducto, cantidad: text })
+        }
         keyboardType="numeric"
       />
       <Text style={styles.label}>Precio:</Text>
       <TextInput
         style={styles.input}
-        value={price}
-        onChangeText={setPrice}
+        value={newProducto.precio}
+        onChangeText={(text) =>
+          setNewProducto({ ...newProducto, precio: text })
+        }
         keyboardType="numeric"
       />
       <Text style={styles.label}>Barcode:</Text>
       <TextInput style={styles.input} value={barcode} editable={false} />
-      <PhotoPicker setImage={setImage} image={image} />
+      <PhotoPicker
+        setImage={setImage}
+        image={image}
+        setNewProducto={setNewProducto}
+        newProducto={newProducto}
+      />
       <Button title="Guardar" onPress={saveProduct} />
+      {error && <p>{error}</p>}
     </View>
   );
 };

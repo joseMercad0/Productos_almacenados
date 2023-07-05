@@ -3,11 +3,11 @@ import React from "react";
 import { SimpleLineIcons } from "@expo/vector-icons";
 
 const Item = ({
-  descripcion,
-  imagenURL,
+  nombre,
+  imagenUrl,
   precio,
   cantidad,
-  barcode,
+  barCode,
   id,
   estaEditando,
 }) => (
@@ -25,12 +25,12 @@ const Item = ({
     ) : (
       <></>
     )}
-    <Image style={styles.image} source={{ uri: imagenURL }} />
+    <Image style={styles.image} source={{ uri: imagenUrl }} />
     <View>
-      <Text style={styles.text}>Descripcion: {descripcion}</Text>
+      <Text style={styles.text}>Nombre: {nombre}</Text>
       <Text style={styles.text}>Precio: {precio}</Text>
       <Text style={styles.text}>Cantidad: {cantidad}</Text>
-      <Text style={styles.text}>Barcode: {barcode}</Text>
+      <Text style={styles.text}>Barcode: {barCode}</Text>
     </View>
   </View>
 );

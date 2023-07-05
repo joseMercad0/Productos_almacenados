@@ -8,39 +8,29 @@ import {
 import React, { useRef, useState, useEffect } from "react";
 import Drawer from "./drawer";
 import Header from "./header";
-import { db } from "../../config";
-import { ref, onValue } from "firebase/database";
+import axios from "axios";
 import Item from "./listaItem";
 
 const ListaProductos = ({ setScreen, uid }) => {
-  const [todoData, setTodoData] = useState([]);
+  const [productos, setProductos] = useState([]);
   const drawerRef = useRef(null); //Usado para abrir y cerrar el Drawer
   const [searchTerm, setSearchTerm] = useState(""); //usado para filtrar objetos
   const [estaEditando, setEstaEditando] = useState(false); //Usado para editar o no lista de productos
 
   useEffect(() => {
-    const starCountRef = ref(db, `usuarios/${uid}/snaps`);
-    onValue(starCountRef, (snapshot) => {
-      const data = snapshot.val();
-      if (data) {
-        //obtener ID del snapshot para luego implementar función eliminar
-        const newUsuarios = [];
-        snapshot.forEach((childSnapshot) => {
-          const key = childSnapshot.key; //obtiene el ID
-          const childData = childSnapshot.val();
-          const usuario = {
-            id: key,
-            ...childData,
-          };
-          newUsuarios.push(usuario);
-        });
-        console.log(newUsuarios);
-        setTodoData(newUsuarios);
-      } else {
-        setTodoData([]);
-      }
-    });
+    getProductos();
   }, []);
+
+  const getProductos = async () => {
+    try {
+      const response = await axios.get(
+        "http://52.20.145.207:3000/api/products"
+      );
+      setProductos(response.data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   //abrir drawer
   const openDrawer = () => {
@@ -62,8 +52,8 @@ const ListaProductos = ({ setScreen, uid }) => {
   };
 
   //datos filtrados con barra de búsqueda
-  const filteredData = todoData.filter((item) =>
-    item.descripcion.toLowerCase().includes(searchTerm.toLowerCase())
+  const filteredData = productos.filter((item) =>
+    item.nombre.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   return (
@@ -97,11 +87,11 @@ const ListaProductos = ({ setScreen, uid }) => {
             { item } //renderizar componente Item con array de datos
           ) => (
             <Item
-              descripcion={item.descripcion}
-              imagenURL={item.imagenURL}
+              nombre={item.nombre}
+              imagenUrl={item.imagenUrl}
               precio={item.precio}
               cantidad={item.cantidad}
-              barcode={item.barcode}
+              barCode={item.barCode}
               id={item.id}
               estaEditando={estaEditando}
             />
