@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { View, Image, Button, StyleSheet } from "react-native";
+import { View, Image, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { Camera } from "expo-camera";
 import * as ImagePicker from "expo-image-picker";
-import { TouchableOpacity } from "react-native-web";
 
-const PhotoPicker = ({ setImage, image, setNewProducto, newProducto }) => {
+const PhotoPicker = ({ setImage, image }) => {
   const [cameraPermission, setCameraPermission] = useState(null);
 
   useEffect(() => {
@@ -27,7 +26,6 @@ const PhotoPicker = ({ setImage, image, setNewProducto, newProducto }) => {
 
       if (uri) {
         setImage(uri);
-        setNewProducto({ ...newProducto, imagen: uri });
       }
     }
   };
@@ -44,7 +42,6 @@ const PhotoPicker = ({ setImage, image, setNewProducto, newProducto }) => {
 
       if (uri) {
         setImage(uri);
-        setNewProducto({ ...newProducto, imagen: uri });
       }
     }
   };

@@ -17,7 +17,10 @@ const IndexScreen = ({ uid }) => {
     if (screen === "scanner") {
       return <Scanner setScreen={setScreen} onChange={handleBarcodeChange} />;
     }
-    if (screen === "nuevo") return <RegistrarProducto barcode={barcode} />;
+    if (screen === "nuevo")
+      return (
+        <RegistrarProducto setScreen={setScreen} barcode={barcode} uid={uid} />
+      );
     else if (screen === null)
       return <ListaProductos setScreen={setScreen} uid={uid} />;
   };

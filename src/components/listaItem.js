@@ -45,10 +45,11 @@ const styles = StyleSheet.create({
   },
   text: {
     fontSize: 20,
+    marginLeft: 15,
   },
   itemContainer: {
     margin: 15,
     flexDirection: "row",
-    justifyContent: "space-between",
+    justifyContent: "flex-start",
   },
 });

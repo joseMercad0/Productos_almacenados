@@ -27,6 +27,7 @@ const ListaProductos = ({ setScreen, uid }) => {
         "http://52.20.145.207:3000/api/products"
       );
       setProductos(response.data);
+      console.log(productos);
     } catch (error) {
       console.error(error);
     }
@@ -122,7 +123,6 @@ const styles = StyleSheet.create({
   header: {
     fontSize: 30,
     textAlign: "center",
-    marginTop: 50,
     fontWeight: "bold",
   },
 });
