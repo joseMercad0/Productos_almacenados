@@ -14,6 +14,8 @@ import { ref, getDownloadURL, uploadBytes } from "firebase/storage";
 
 const RegistrarProducto = ({ barcode, setScreen, uid }) => {
   const [image, setImage] = useState(null);
+  const [imagenId, setImagenId] = useState(null);
+  const [imagenUrl, setImagenUrl] = useState(null);
   const [error, setError] = useState(null);
   const [newProducto, setNewProducto] = useState({
     nombre: "",
@@ -29,9 +31,24 @@ const RegistrarProducto = ({ barcode, setScreen, uid }) => {
 
   // Función para guardar el producto
   const saveProduct = async () => {
+    const updatedProducto = {
+      ...newProducto,
+      nombre: newProducto.nombre,
+      descripcion: newProducto.descripcion,
+      precio: newProducto.precio,
+      barCode: newProducto.barCode,
+      cantiidad: newProducto.cantidad,
+      usuarioId: newProducto.usuarioId,
+      fechaHora: newProducto.fechaHora,
+    };
+
     await subirImagen();
+
+    updatedProducto.imagenId = imagenId;
+    updatedProducto.imagenUrl = imagenUrl;
     try {
-      await axios.post("http://52.20.145.207:3000/api/product", newProducto);
+      console.log(updatedProducto);
+      //await axios.post("http://52.20.145.207:3000/api/product", newProducto);
 
       setNewProducto({
         nombre: "",
@@ -57,21 +74,23 @@ const RegistrarProducto = ({ barcode, setScreen, uid }) => {
     try {
       const imageName = generateRandomImageName();
       const metadata = { contentType: "image/jpeg" };
-      const storageRef = ref(storage, `imagenes/${imageName}`);
+      const storageRef = ref(storage, `imagenes/${imageName}.jpg`);
       const imageBlob = await getBlobFromUri(image);
 
       // Subir la imagen al storage
       await uploadBytes(storageRef, imageBlob, metadata);
 
-      // Obtener ID de la imagen subida
-      const id = storageRef.name;
-      console.log(id);
-      setNewProducto({ ...newProducto, imagenId: id });
-
       // Obtener URL de la imagen subida
       const downloadURL = await getDownloadURL(storageRef);
+
       console.log(downloadURL);
-      setNewProducto({ ...newProducto, imagenUrl: downloadURL });
+      console.log(imageName);
+
+      setImagenId(imageName);
+      setImagenUrl(downloadURL);
+
+      console.log(imagenId);
+      console.log(imagenUrl);
 
       console.log("Imagen subida exitosamente");
     } catch (error) {
@@ -91,7 +110,7 @@ const RegistrarProducto = ({ barcode, setScreen, uid }) => {
       imageName += characters.charAt(randomIndex);
     }
 
-    return `${imageName}.jpg`;
+    return `${imageName}`;
   };
 
   // Convertir uri de imagen a Blob para subirlo al storage
