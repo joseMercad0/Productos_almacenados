@@ -17,15 +17,15 @@ const PhotoPicker = ({ setImage, image }) => {
 
   const takePhoto = async () => {
     if (cameraPermission) {
-      const { uri } = await ImagePicker.launchCameraAsync({
+      let result = await ImagePicker.launchCameraAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.Images,
         allowsEditing: true,
         aspect: [4, 3],
-        quality: 1,
+        quality: 0.5,
       });
 
-      if (uri) {
-        setImage(uri);
+      if (!result.canceled) {
+        setImage(result.assets[0].uri);
       }
     }
   };
@@ -33,31 +33,46 @@ const PhotoPicker = ({ setImage, image }) => {
   const selectImage = async () => {
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
     if (status === "granted") {
-      const { uri } = await ImagePicker.launchImageLibraryAsync({
+      let result = await ImagePicker.launchImageLibraryAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.Images,
         allowsEditing: true,
         aspect: [4, 3],
-        quality: 1,
+        quality: 0.5,
       });
 
-      if (uri) {
-        setImage(uri);
+      if (!result.canceled) {
+        setImage(result.assets[0].uri);
       }
     }
   };
 
   return (
     <View>
-      <TouchableOpacity style={styles.button} onPress={takePhoto}>
+      <TouchableOpacity
+        style={styles.button}
+        onPress={() => {
+          takePhoto();
+        }}
+      >
         <Text style={styles.buttonText}>Tomar foto</Text>
       </TouchableOpacity>
-      <TouchableOpacity style={styles.button} tonPress={selectImage}>
+      <TouchableOpacity
+        style={styles.button}
+        onPress={() => {
+          selectImage();
+        }}
+      >
         <Text style={styles.buttonText}>Seleccionar imagen de galeria</Text>
       </TouchableOpacity>
       {image && (
         <Image
           source={{ uri: image }}
-          style={{ width: 200, height: 200, alignSelf: "center" }}
+          style={{
+            width: 300,
+            height: 200,
+            alignSelf: "center",
+            marginBottom: 15,
+          }}
         />
       )}
     </View>

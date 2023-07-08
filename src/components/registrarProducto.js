@@ -196,24 +196,6 @@ const styles = StyleSheet.create({
     padding: 8,
     marginBottom: 16,
   },
-  photoButton: {
-    borderWidth: 1,
-    borderColor: "#ccc",
-    borderRadius: 4,
-    padding: 16,
-    alignItems: "center",
-    justifyContent: "center",
-    marginBottom: 16,
-  },
-  photoText: {
-    fontSize: 16,
-    color: "#666",
-  },
-  photo: {
-    width: 200,
-    height: 200,
-    marginBottom: 16,
-  },
 });
 
 export default RegistrarProducto;
