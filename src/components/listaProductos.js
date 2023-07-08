@@ -11,7 +11,7 @@ import Header from "./header";
 import axios from "axios";
 import Item from "./listaItem";
 
-const ListaProductos = ({ setScreen, uid }) => {
+const ListaProductos = ({ setScreen, uid, logout }) => {
   const [productos, setProductos] = useState([]);
   const drawerRef = useRef(null); //Usado para abrir y cerrar el Drawer
   const [searchTerm, setSearchTerm] = useState(""); //usado para filtrar objetos
@@ -27,7 +27,7 @@ const ListaProductos = ({ setScreen, uid }) => {
         "http://52.20.145.207:3000/api/products"
       );
       setProductos(response.data);
-      console.log(productos);
+      //console.log(productos);
     } catch (error) {
       console.error(error);
     }
@@ -67,6 +67,7 @@ const ListaProductos = ({ setScreen, uid }) => {
           estaEditando={estaEditando}
           onEditar={onEditar}
           offEditar={offEditar}
+          logout={logout}
         />
       )}
     >

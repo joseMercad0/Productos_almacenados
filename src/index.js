@@ -4,7 +4,7 @@ import Scanner from "./components/scanner";
 import ListaProductos from "./components/listaProductos";
 import RegistrarProducto from "./components/registrarProducto";
 
-const IndexScreen = ({ uid }) => {
+const IndexScreen = ({ uid, logout }) => {
   const [screen, setScreen] = useState(null);
   const [barcode, setBarcode] = useState(null);
 
@@ -22,7 +22,7 @@ const IndexScreen = ({ uid }) => {
         <RegistrarProducto setScreen={setScreen} barcode={barcode} uid={uid} />
       );
     else if (screen === null)
-      return <ListaProductos setScreen={setScreen} uid={uid} />;
+      return <ListaProductos setScreen={setScreen} uid={uid} logout={logout} />;
   };
 
   return getScreen();

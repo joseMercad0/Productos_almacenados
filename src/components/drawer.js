@@ -1,17 +1,17 @@
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import React from "react";
-import { signOut } from "firebase/auth";
-import { auth } from "../../config";
+//import { signOut } from "firebase/auth";
+//import { auth } from "../../config";
 
-const Drawer = ({ onEditar, offEditar, estaEditando }) => {
-  //Cerrar sesión handler
-  const logout = async () => {
-    try {
-      await signOut(auth);
-    } catch (e) {
-      console.log(e);
-    }
-  };
+const Drawer = ({ onEditar, offEditar, estaEditando, logout }) => {
+  // //Cerrar sesión handler FIREBASE AUTH
+  // const logout = async () => {
+  //   try {
+  //     await signOut(auth);
+  //   } catch (e) {
+  //     console.log(e);
+  //   }
+  // };
 
   const renderDrawer = () => {
     return (
