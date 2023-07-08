@@ -10,6 +10,8 @@ const Item = ({
   barCode,
   id,
   estaEditando,
+  imagenId,
+  onEliminar,
 }) => (
   <View style={styles.itemContainer}>
     {estaEditando ? ( //dependiendo del modo edición se muestra botón de eliminar producto o no
@@ -18,8 +20,8 @@ const Item = ({
         size={25}
         color="red"
         style={{ alignSelf: "center", marginRight: 15 }}
-        onPress={() => {
-          console.log("eliminar " + id);
+        onLongPress={() => {
+          onEliminar(id, imagenId);
         }}
       />
     ) : (

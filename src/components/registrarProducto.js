@@ -24,8 +24,6 @@ const RegistrarProducto = ({ barcode, setScreen, uid }) => {
     imagenId: "",
     imagenUrl: "",
     usuarioId: uid,
-    fecha: "",
-    hora: "",
   });
 
   // Función para guardar el producto
@@ -55,7 +53,6 @@ const RegistrarProducto = ({ barcode, setScreen, uid }) => {
         imagenId: "",
         imagenUrl: "",
         usuarioId: uid,
-        fechaHora: "",
       });
       setImage(null);
       setError("");

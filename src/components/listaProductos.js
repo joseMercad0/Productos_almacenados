@@ -10,6 +10,8 @@ import Drawer from "./drawer";
 import Header from "./header";
 import axios from "axios";
 import Item from "./listaItem";
+import { storage } from "../../config";
+import { deleteObject, ref } from "firebase/storage";
 
 const ListaProductos = ({ setScreen, uid, logout }) => {
   const [productos, setProductos] = useState([]);
@@ -57,6 +59,38 @@ const ListaProductos = ({ setScreen, uid, logout }) => {
     item.nombre.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
+  //eliminar producto de la lista
+  const onEliminar = async (id, imagenId) => {
+    const imagePath = `imagenes/${imagenId}.jpg`;
+    const storageRef = ref(storage, imagePath);
+
+    try {
+      //Eliminar imagen de Firebase Storage
+      await deleteObject(storageRef)
+        .then(() => {
+          console.log("Imagen eliminada exitosamente!");
+        })
+        .catch((error) => {
+          console.log("Error al eliminar la imagen:", error);
+        });
+      //Eliminar producto usando API
+      await axios
+        .delete(`http://52.20.145.207:3000/api/product/${id}`)
+        .then(() => {
+          console.log("Producto eliminado correctamente!");
+        })
+        .catch((error) => {
+          console.log("Error al eliminar el producto! " + error.message);
+        });
+
+      //Actualizar lista de productos
+      getProductos();
+    } catch (error) {
+      console.log(error);
+      console.log("No se puedo eliminar el producto!");
+    }
+  };
+
   return (
     <DrawerLayoutAndroid //componente Drawer nativo de android para cerrar sesion, etc.
       ref={drawerRef}
@@ -91,11 +125,13 @@ const ListaProductos = ({ setScreen, uid, logout }) => {
             <Item
               nombre={item.nombre}
               imagenUrl={item.imagenUrl}
+              imagenId={item.imagenId}
               precio={item.precio}
               cantidad={item.cantidad}
               barCode={item.barCode}
               id={item.id}
               estaEditando={estaEditando}
+              onEliminar={onEliminar}
             />
           )}
           keyExtractor={(item) => item.id}
