@@ -8,26 +8,47 @@ import {
 } from "react-native";
 import React, { useState } from "react";
 import chemslar from "../../assets/Chemslar.png";
-import { auth } from "../../config";
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import axios from "axios";
+// import { auth } from "../../config";
+// import { createUserWithEmailAndPassword } from "firebase/auth";
 
 const Signup = ({ setScreen }) => {
+  const [nombre, setNombre] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState(null);
 
-  // función registrar usuario
-  const handleLogin = async () => {
-    try {
-      if (password === confirmPassword) {
-        await createUserWithEmailAndPassword(auth, email, password);
-      } else {
-        setError("Las contraseñas no coinciden");
-      }
-    } catch (error) {
-      setError("Hubo un problema creando tu cuenta");
-    }
+  // // función registrar usuario FIREBASE AUTH
+  // const handleSignup = async () => {
+  //   try {
+  //     if (password === confirmPassword) {
+  //       await createUserWithEmailAndPassword(auth, email, password);
+  //     } else {
+  //       setError("Las contraseñas no coinciden");
+  //     }
+  //   } catch (error) {
+  //     setError("Hubo un problema creando tu cuenta");
+  //   }
+  // };
+
+  const handleSignup = async (nombre, email, password) => {
+    const newUser = {
+      nombre: nombre,
+      correo: email,
+      pass: password,
+      rol: "user",
+    };
+    await axios
+      .post("http://52.20.145.207:3000/api/user", newUser)
+      .then(() => {
+        console.log("Usuario creado exitosamente!");
+        setScreen("login");
+      })
+      .catch((error) => {
+        console.log("Ocurrio un error!: " + error.message);
+        setError("Hubo un problema creando tu cuenta!");
+      });
   };
 
   return (
@@ -39,7 +60,14 @@ const Signup = ({ setScreen }) => {
       <TouchableOpacity onPress={() => setScreen("login")}>
         <Text style={styles.link}>Iniciar sesión con cuenta existente</Text>
       </TouchableOpacity>
-      <Text style={styles.text}>Usuario</Text>
+      <Text style={styles.text}>Nombre</Text>
+      <TextInput
+        style={styles.input}
+        placeholder="Nombre de usuario"
+        value={nombre}
+        onChangeText={(text) => setNombre(text)}
+      />
+      <Text style={styles.text}>Correo electrónico</Text>
       <TextInput
         style={styles.input}
         placeholder="Correo electrónico"
@@ -64,8 +92,10 @@ const Signup = ({ setScreen }) => {
       />
       <TouchableOpacity
         style={styles.button}
-        onPress={handleLogin}
-        disabled={!email || !password || !confirmPassword}
+        onPress={() => {
+          handleSignup(nombre, email, password);
+        }}
+        disabled={!nombre || !email || !password || !confirmPassword}
       >
         <Text style={styles.buttonText}>Crear cuenta</Text>
       </TouchableOpacity>
