@@ -3,9 +3,9 @@ import {
   View,
   Text,
   TextInput,
-  Button,
   StyleSheet,
   ScrollView,
+  TouchableOpacity,
 } from "react-native";
 import PhotoPicker from "./photoPicker";
 import axios from "axios";
@@ -119,6 +119,14 @@ const RegistrarProducto = ({ barcode, setScreen, uid }) => {
 
   return (
     <View style={styles.container}>
+      <TouchableOpacity
+        style={styles.button}
+        onPress={() => {
+          setScreen(null);
+        }}
+      >
+        <Text style={styles.buttonText}>Volver</Text>
+      </TouchableOpacity>
       <ScrollView>
         <Text style={styles.label}>Nombre:</Text>
         <TextInput
@@ -162,9 +170,11 @@ const RegistrarProducto = ({ barcode, setScreen, uid }) => {
           setNewProducto={setNewProducto}
           newProducto={newProducto}
         />
-        <Button
-          title="Guardar"
-          onPress={saveProduct}
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => {
+            saveProduct();
+          }}
           disabled={
             !newProducto.nombre ||
             !newProducto.descripcion ||
@@ -172,7 +182,9 @@ const RegistrarProducto = ({ barcode, setScreen, uid }) => {
             !newProducto.precio ||
             !image
           }
-        />
+        >
+          <Text style={styles.buttonText}>Guardar</Text>
+        </TouchableOpacity>
         {error && <p>{error}</p>}
       </ScrollView>
     </View>
@@ -195,6 +207,16 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     padding: 8,
     marginBottom: 16,
+  },
+  button: {
+    height: 40,
+    backgroundColor: "rgb(0,117,227)",
+    marginBottom: 10,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  buttonText: {
+    color: "white",
   },
 });
 
